@@ -11,6 +11,7 @@ class SearchController < ApplicationController
     difference_in_days = (birth_date..todays_date).to_a.size
     difference_in_hours = difference_in_days * 24
     difference_in_minutes = difference_in_hours * 60
+    difference_in_seconds = difference_in_minutes * 60
     @age = Age.find_by days: difference_in_days
     milestone = get_milestone(birth_date)
 
@@ -20,8 +21,13 @@ class SearchController < ApplicationController
       text = "Time to celebrate! You are #{milestone} today!"
       render json: {age_description: text}
     else
-      text = "You are #{difference_in_days} days, #{difference_in_hours} hours and #{difference_in_minutes} minutes today!"
-      render json: {age_description: text}
+      age_numbers = {
+        days: difference_in_days,
+        hours: difference_in_hours,
+        minutes: difference_in_minutes,
+        seconds:difference_in_seconds
+      }
+      render json: {age_numbers: age_numbers}
     end
   end
 
