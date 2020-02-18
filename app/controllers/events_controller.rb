@@ -6,7 +6,7 @@ class EventsController < ApplicationController
 
     if @age.save
       # flash[:notice] = "Successfully created event."
-      render json: {age: @age}
+      render json: @age, include: :events
     else
       render json: {
         error: @age.errors.full_messages,
