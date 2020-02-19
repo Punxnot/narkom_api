@@ -1,6 +1,12 @@
 class SearchController < ApplicationController
+  require 'wikipedia'
+
+  Wikipedia.configure {
+    domain 'ru.wikipedia.org'
+    path   'w/api.php'
+  }
+
   def items
-    require 'wikipedia'
     page = Wikipedia.find(params[:query])
     render json: {text: page.summary, image: page.main_image_url}
   end
@@ -16,7 +22,14 @@ class SearchController < ApplicationController
     milestone = get_milestone(birth_date)
 
     if @age
-      render json: {age_description: @age.description, events: @age.events}
+      wiki_data = Wikipedia.find(@age.events[0].title)
+      render json: {age_description: @age.description,
+                    events: @age.events,
+                    wiki: {
+                      text: wiki_data.summary,
+                      image: wiki_data.main_image_url
+                    }
+      }
     elsif milestone
       text = "Time to celebrate! You are #{milestone} today!"
       render json: {age_description: text}
