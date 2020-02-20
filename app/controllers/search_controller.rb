@@ -20,11 +20,18 @@ class SearchController < ApplicationController
     difference_in_seconds = difference_in_minutes * 60
     @age = Age.find_by days: difference_in_days
     milestone = get_milestone(birth_date)
+    age_numbers = {
+      days: difference_in_days,
+      hours: difference_in_hours,
+      minutes: difference_in_minutes,
+      seconds:difference_in_seconds
+    }
 
     if @age
       wiki_data = Wikipedia.find(@age.events[0].title)
       render json: {age_description: @age.description,
                     events: @age.events,
+                    age_numbers: age_numbers,
                     wiki: {
                       text: wiki_data.summary,
                       image: wiki_data.main_image_url
@@ -32,14 +39,8 @@ class SearchController < ApplicationController
       }
     elsif milestone
       text = "Time to celebrate! You are #{milestone} today!"
-      render json: {age_description: text}
+      render json: {age_description: text, age_numbers: age_numbers}
     else
-      age_numbers = {
-        days: difference_in_days,
-        hours: difference_in_hours,
-        minutes: difference_in_minutes,
-        seconds:difference_in_seconds
-      }
       render json: {age_numbers: age_numbers}
     end
   end
