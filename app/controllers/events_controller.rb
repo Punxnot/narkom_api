@@ -5,7 +5,7 @@ class EventsController < ApplicationController
     @age.events.build(event_params)
 
     if @age.save
-      all_ages = Age.all
+      all_ages = Age.order(days: :asc)
       render json: all_ages, include: :events
     else
       render json: {
@@ -16,7 +16,7 @@ class EventsController < ApplicationController
   end
 
   def all_records
-    @ages = Age.all
+    @ages = Age.order(days: :asc)
     render json: @ages, include: :events
   end
 
