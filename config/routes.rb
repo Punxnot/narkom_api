@@ -5,5 +5,6 @@ Rails.application.routes.draw do
   get 'search/items', to: 'search#items'
   get 'search/age', to: 'search#age'
   post 'create/event', to: 'events#create'
+  put 'edit/event', to: 'events#edit'
   get 'get_all_records', to: 'events#all_records'
 end

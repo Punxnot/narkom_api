@@ -15,6 +15,22 @@ class EventsController < ApplicationController
     end
   end
 
+  def edit
+    @event = Event.find(params[:id])
+
+    @event.title = params[:title]
+    @event.description = params[:description]
+
+    if @event.save
+      render json: @event
+    else
+      render json: {
+        error: @event.errors.full_messages,
+        status: 400
+      }, status: 400
+    end
+  end
+
   def all_records
     @ages = Age.order(days: :asc)
     render json: @ages, include: :events
